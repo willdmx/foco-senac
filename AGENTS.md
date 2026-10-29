@@ -16,7 +16,7 @@ Use `bunx` instead of `npx` if the project uses bun (`bun.lock` present).
 npx expo install <package>  # ALWAYS use instead of npm/yarn/pnpm/bun add — resolves SDK-compatible versions
 npx expo start              # start the dev server
 npx expo lint               # lint
-npx tsc --noEmit            # typecheck
+npx tsc --project jsconfig.json --noEmit  # check JavaScript, without emitting code
 npx expo-doctor             # diagnose dependency and config issues
 npx expo install --fix      # fix incompatible package versions
 ```
@@ -25,9 +25,11 @@ Run lint and typecheck before declaring any task done.
 
 ## Navigation & Routing
 
-- Use **Expo Router** for all navigation. Routes live in `src/app/` — every file there is a screen, `_layout.tsx` files define navigators. Keep non-route code (components, hooks, utils) outside `src/app/`.
-- Import `Link`, `router`, and `useLocalSearchParams` from `expo-router`.
-- Docs: https://docs.expo.dev/router/introduction.md
+- Foco keeps the Expo blank entry: `index.js` registers `App.js`.
+- The user explicitly selected React state and callbacks for navigation. Screens live in `src/screens/`; `App.js` selects the visible screen.
+- Do not introduce `src/app/`, Expo Router, or navigation dependencies.
+- Application files must remain JavaScript (`.js`), with native React Native components. Use `jsconfig.json` and JSDoc for static checks, without migrating to TypeScript.
+- On Windows PowerShell, use `npx.cmd` and `npm.cmd` to avoid blocked `.ps1` scripts.
 
 ## Building with EAS
 

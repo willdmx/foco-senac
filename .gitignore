@@ -31,7 +31,35 @@ yarn-error.*
 *.pem
 
 # local env files
+.env
+.env.*
+!.env.example
 .env*.local
+.npmrc
+credentials.json
+credentials.*.json
+*.keystore
+*.pfx
+.aws/
+.ssh/
+.codex/
+
+# local data and temporary output
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.log
+*.tmp
+*.temp
+*.bak
+*~
+tmp/
+temp/
+.tmp/
+.cache/
+coverage/
 
 # typescript
 *.tsbuildinfo
