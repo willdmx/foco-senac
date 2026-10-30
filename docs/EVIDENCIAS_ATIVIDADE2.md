@@ -14,6 +14,8 @@ Este documento registra evidências e pendências. Itens marcados correspondem a
 | APK: nome e tamanho | `foco-v2.0.0.apk`, `75856729` bytes |
 | SHA-256 | `9ec14e6f08c983f6da43e0581d61d9375c54cdb85224b8d3269366d5a3f09a78` |
 | Registro do download e da estrutura | [apk.json](evidencias/apk.json), 30/10/2026 às 19h39min20s (São Paulo) |
+| Release / tag pública | [v2.0.0](https://github.com/willdmx/foco-senac/releases/tag/v2.0.0), commit `39297ebf69c8cc2a37a6d3216489c6f5f75e4ce7` |
+| Verificação pública sem autenticação | [publicacao.json](evidencias/publicacao.json), 30/10/2026 às 19h40min49s (São Paulo) |
 | Aparelho ou emulador / versão Android | Não executado; dispositivo não disponível |
 | Instalação nova ou atualização | Nenhuma instalação executada neste registro |
 | Identificador Android configurado | `com.willdmx.foco` |
@@ -42,7 +44,7 @@ Saídas reais: [testes.txt](evidencias/testes.txt), [lint.txt](evidencias/lint.t
 - [ ] Capturar a confirmação de instalação ou abertura pelo ícone do Foco.
 - [ ] Abrir o aplicativo instalado sem Expo Go ou servidor Metro.
 
-O build e o arquivo estão registrados na [página EAS](https://expo.dev/accounts/willdmx/projects/foco/builds/0aa6a645-5676-4895-a78c-b726e9e0e544) e em [apk.json](evidencias/apk.json); o [APK está disponível no EAS](https://expo.dev/artifacts/eas/LNOr7pgwpGNROJRNtqAetYmdg_Us4XRSfPT8X5FA7DM.apk). Não foram fabricadas capturas.
+O build e o arquivo estão registrados na [página EAS](https://expo.dev/accounts/willdmx/projects/foco/builds/0aa6a645-5676-4895-a78c-b726e9e0e544) e em [apk.json](evidencias/apk.json). O [APK está disponível publicamente no GitHub](https://github.com/willdmx/foco-senac/releases/download/v2.0.0/foco-v2.0.0.apk), com [SHA256SUMS.txt](https://github.com/willdmx/foco-senac/releases/download/v2.0.0/SHA256SUMS.txt). O download público foi validado conforme [publicacao.json](evidencias/publicacao.json). Não foram fabricadas capturas.
 
 Nomes sugeridos para capturas futuras: `01-build-concluido.png`, `02-instalacao-apk.png` e `03-app-instalado.png`. As imagens precisam vir do EAS e do dispositivo realmente utilizados. Uma captura do Expo Go ou a inspeção do arquivo ZIP não comprova instalação do APK.
 
@@ -79,10 +81,12 @@ O banco do Expo Go não é importado automaticamente para o APK. Não apresentar
 
 - [x] Conferir os commits da Atividade 1 preservados no GitHub, com a tag `v1.0.0` em `27fa040`.
 - [x] Publicar código-fonte, testes e documentação v2 em `main`, no commit `7d9a4f3`, confirmado no remoto.
-- [ ] Conferir tag `v1.0.0` na base e `v2.0.0` na entrega correspondente.
-- [ ] Publicar relatório, README, roteiro e evidências sem credenciais ou dados pessoais desnecessários.
-- [ ] Anexar o APK real à GitHub Release `v2.0.0`.
-- [ ] Abrir o link publicado e confirmar que o arquivo pode ser baixado.
+- [x] Conferir tag `v1.0.0` na base e `v2.0.0` no commit `39297ebf69c8cc2a37a6d3216489c6f5f75e4ce7`.
+- [x] Publicar relatório, README, roteiro e evidências da entrega, sem chaves de assinatura ou credenciais.
+- [x] Anexar o APK real e `SHA256SUMS.txt` à GitHub Release pública `v2.0.0`.
+- [x] Abrir o link público sem autenticação, baixar novamente e conferir tamanho e SHA-256 idênticos ao EAS.
+
+A tag inclui documentação do APK adicionada após o commit de build; a comparação dos arquivos de aplicação, configuração e testes confirmou o mesmo código-fonte. Atualizações documentais posteriores registram a publicação, sem modificar o código compilado.
 
 ## Registro dos resultados
 
@@ -96,6 +100,8 @@ O banco do Expo Go não é importado automaticamente para o APK. Não apresentar
 | Publicação do código v2 | [Commit `7d9a4f3`](https://github.com/willdmx/foco-senac/commit/7d9a4f31a845fe98ab21169d4f66b4a3ab5dcc7a) | 30/10/2026 | Publicado em `main` |
 | Build EAS concluído | [Build `0aa6a645`](https://expo.dev/accounts/willdmx/projects/foco/builds/0aa6a645-5676-4895-a78c-b726e9e0e544) | 30/10/2026, 19h38min21s (São Paulo) | `FINISHED`, APK gerado |
 | Download e verificação do APK | [apk.json](evidencias/apk.json) | 30/10/2026, 19h39min20s (São Paulo) | 75.856.729 bytes; SHA-256 e estrutura registrados |
+| Release pública | [Foco v2.0.0](https://github.com/willdmx/foco-senac/releases/tag/v2.0.0) | 30/10/2026, 19h40min33s (São Paulo) | Publicada com APK e checksum |
+| Download público sem autenticação | [publicacao.json](evidencias/publicacao.json) | 30/10/2026, 19h40min49s (São Paulo) | Mesmo tamanho e SHA-256 do APK EAS |
 | Instalação e uso em Android | Sem arquivo ou captura real | Pendente | Não realizado neste registro |
 
 Quando uma verificação falhar, registrar o comportamento observado e a limitação. O checklist não deve ser marcado para indicar apenas que um recurso foi implementado no código.

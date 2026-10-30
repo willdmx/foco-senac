@@ -9,7 +9,7 @@
 
 ## Situação registrada
 
-As duas funcionalidades da versão 2 estão implementadas. Em 30/10/2026, a suíte integrada concluiu com **36 testes aprovados, zero falhas e código de saída 0**; lint, checagem estática, bundle Android e as **21 verificações do Expo Doctor** também passaram. O código-fonte foi publicado em `main` no commit `7d9a4f31a845fe98ab21169d4f66b4a3ab5dcc7a`. O build EAS desse código terminou com estado **`FINISHED`**, e o APK foi baixado e verificado. A GitHub Release e o teste físico ainda aguardam confirmação. A versão 1.0 continua preservada no histórico Git.
+As duas funcionalidades da versão 2 estão implementadas. Em 30/10/2026, a suíte integrada concluiu com **36 testes aprovados, zero falhas e código de saída 0**; lint, checagem estática, bundle Android e as **21 verificações do Expo Doctor** também passaram. O código-fonte foi publicado em `main` no commit `7d9a4f31a845fe98ab21169d4f66b4a3ab5dcc7a`. O build EAS desse código terminou com estado **`FINISHED`**, e o APK foi baixado e verificado. A **GitHub Release v2.0.0 está pública**, com APK e checksum; o download sem autenticação foi validado. **Somente a instalação e o uso físico permanecem sem comprovação.** A versão 1.0 continua preservada no histórico Git.
 
 | Item | Estado atual | Evidência |
 | --- | --- | --- |
@@ -24,7 +24,7 @@ As duas funcionalidades da versão 2 estão implementadas. Em 30/10/2026, a suí
 | Build EAS / APK | `FINISHED`; APK baixado e estrutura verificada | [Build EAS](https://expo.dev/accounts/willdmx/projects/foco/builds/0aa6a645-5676-4895-a78c-b726e9e0e544) e [registro do artefato](docs/evidencias/apk.json) |
 | Instalação e uso em Android | Não realizados neste registro | Capturas reais pendentes |
 | Código v2 no GitHub | Publicado em `main`; envio confirmado | [Commit `7d9a4f3`](https://github.com/willdmx/foco-senac/commit/7d9a4f31a845fe98ab21169d4f66b4a3ab5dcc7a) |
-| GitHub Release v2 / APK anexado | Pendentes de confirmação | APK já disponível no EAS |
+| GitHub Release v2 / APK anexado | Públicos; download sem autenticação verificado | [Release v2.0.0](https://github.com/willdmx/foco-senac/releases/tag/v2.0.0) e [registro da publicação](docs/evidencias/publicacao.json) |
 
 ## Objetivo e escopo preservado
 
@@ -116,12 +116,17 @@ npx.cmd eas-cli@latest build -p android --profile preview
 | URL do build | [Acompanhar build EAS](https://expo.dev/accounts/willdmx/projects/foco/builds/0aa6a645-5676-4895-a78c-b726e9e0e544) |
 | Estado final do build | **`FINISHED`** |
 | Conclusão | `2026-10-30T22:38:21.813Z` — 19h38min21s em São Paulo |
-| URL do `.apk` | [Baixar APK do EAS](https://expo.dev/artifacts/eas/LNOr7pgwpGNROJRNtqAetYmdg_Us4XRSfPT8X5FA7DM.apk) |
+| URL pública do `.apk` | [Baixar APK pelo GitHub](https://github.com/willdmx/foco-senac/releases/download/v2.0.0/foco-v2.0.0.apk) |
+| Artefato de origem no EAS | [APK do EAS](https://expo.dev/artifacts/eas/LNOr7pgwpGNROJRNtqAetYmdg_Us4XRSfPT8X5FA7DM.apk) |
 | Nome do arquivo baixado | `foco-v2.0.0.apk` |
 | Tamanho | `75856729` bytes |
 | SHA-256 | `9ec14e6f08c983f6da43e0581d61d9375c54cdb85224b8d3269366d5a3f09a78` |
 | Download verificado | 30/10/2026 às 19h39min20s, horário de São Paulo |
 | Commit associado ao build | `7d9a4f31a845fe98ab21169d4f66b4a3ab5dcc7a` |
+| Release pública | [Foco v2.0.0](https://github.com/willdmx/foco-senac/releases/tag/v2.0.0), publicada às 19h40min33s de 30/10/2026 (São Paulo) |
+| Tag / commit da release | `v2.0.0` / `39297ebf69c8cc2a37a6d3216489c6f5f75e4ce7` |
+| Download público conferido | 30/10/2026 às 19h40min49s (São Paulo), sem autenticação; mesmo tamanho e SHA-256 |
+| Arquivo de checksum | [SHA256SUMS.txt](https://github.com/willdmx/foco-senac/releases/download/v2.0.0/SHA256SUMS.txt) |
 
 O [registro `apk.json`](docs/evidencias/apk.json) documenta o artefato real. A inspeção da estrutura ZIP confirmou `AndroidManifest.xml`, `classes.dex`, `classes2.dex`, `assets/index.android.bundle` e `libexpo-sqlite.so` para quatro ABIs (`arm64-v8a`, `armeabi-v7a`, `x86` e `x86_64`). Isso comprova a existência e a estrutura do APK baixado; **não comprova instalação nem execução no Android**, que continuam pendentes.
 
@@ -129,7 +134,7 @@ O [registro `apk.json`](docs/evidencias/apk.json) documenta o artefato real. A i
 
 Para instalar o APK gerado:
 
-1. Abrir o link do arquivo no celular e concluir o download.
+1. Abrir o [APK público da release v2.0.0](https://github.com/willdmx/foco-senac/releases/download/v2.0.0/foco-v2.0.0.apk) no celular e concluir o download.
 2. Permitir a instalação por essa origem quando o Android solicitar e instalar o arquivo.
 3. Abrir Foco pelo ícone, sem precisar iniciar Expo Go ou Metro.
 4. Cadastrar uma tarefa recorrente com prazo e três subtarefas; editar, concluir, reabrir e excluir itens.
@@ -143,11 +148,13 @@ Para instalar o APK gerado:
 
 ## Publicação e apresentação
 
-A publicação mantém os commits da Atividade 1, sem recriar o repositório ou usar force push. A base é `27fa040`, já identificada pela tag publicada `v1.0.0`. O código, os testes e a documentação v2 foram publicados em `main` no commit `7d9a4f31a845fe98ab21169d4f66b4a3ab5dcc7a`, confirmado no remoto. A tag `v2.0.0` deve identificar a entrega após conferir o APK e os artefatos correspondentes.
+A publicação mantém os commits da Atividade 1, sem recriar o repositório ou usar force push. A base é `27fa040`, identificada pela tag publicada `v1.0.0`. O código, os testes e a documentação v2 foram publicados em `main` no commit `7d9a4f31a845fe98ab21169d4f66b4a3ab5dcc7a`, usado pelo EAS. A tag `v2.0.0` aponta para `39297ebf69c8cc2a37a6d3216489c6f5f75e4ce7`, que acrescenta a documentação do APK. A comparação de `App.js`, configuração, `src` e `tests` confirmou ausência de diferenças de código entre o commit compilado e a tag. Os registros posteriores comprovam a publicação e alteram somente documentos.
 
-Na [página de releases](https://github.com/willdmx/foco-senac/releases), criar a entrega `Foco v2.0.0`, associada à tag correta, e anexar o APK efetivamente gerado. As notas devem incluir subtarefas, recorrência, resultado dos testes, link do build, checksum do APK e limitações reais. A publicação do código sem o artefato não deve ser anunciada como entrega completa do APK.
+A [release Foco v2.0.0](https://github.com/willdmx/foco-senac/releases/tag/v2.0.0) foi publicada às 19h40min33s de 30/10/2026, horário de São Paulo, com `foco-v2.0.0.apk` e `SHA256SUMS.txt`. Às 19h40min49s, a consulta e o download foram repetidos sem autenticação: o arquivo público apresentou os mesmos 75.856.729 bytes e SHA-256 do artefato EAS. Esses fatos estão registrados em [publicacao.json](docs/evidencias/publicacao.json).
 
-O [roteiro individual](docs/ROTEIRO_APRESENTACAO.md) foi dimensionado para 3 a 5 minutos. O professor deve receber o link do repositório, da release, do APK e deste relatório quando esses itens estiverem disponíveis.
+Para atualizar anexos de uma release futura, abra a respectiva release no GitHub, escolha **Edit** e anexe o APK realmente gerado e seu arquivo de checksum. Confira a tag e o commit correspondentes antes de publicar; não substitua evidências por arquivos ilustrativos.
+
+O [roteiro individual](docs/ROTEIRO_APRESENTACAO.md) foi dimensionado para 3 a 5 minutos. Os links do repositório, da release, do APK e deste relatório estão disponíveis para a entrega ao professor. O checklist de uso no aparelho permanece pendente e deve ser apresentado como tal.
 
 ## Limitações conhecidas
 

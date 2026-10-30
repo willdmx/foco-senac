@@ -2,7 +2,7 @@
 
 Aplicativo Android para organizar tarefas pessoais e acadêmicas, desenvolvido para as atividades individuais do curso **Técnico em Desenvolvimento de Sistemas do Senac**. A Atividade 2 evolui a versão 1.0 com **subtarefas** e **tarefas recorrentes**, preservando JavaScript, React Native, Expo SDK 57 e SQLite local.
 
-**Estado da entrega v2 em 30/10/2026:** subtarefas e recorrência implementadas; **36 testes aprovados**, lint, checagem estática, bundle Android e **21 verificações do Expo Doctor aprovados**. O código está publicado em `main`, no commit [`7d9a4f3`](https://github.com/willdmx/foco-senac/commit/7d9a4f31a845fe98ab21169d4f66b4a3ab5dcc7a). O [build EAS](https://expo.dev/accounts/willdmx/projects/foco/builds/0aa6a645-5676-4895-a78c-b726e9e0e544) concluiu com estado **`FINISHED`**, e o [APK real está disponível](https://expo.dev/artifacts/eas/LNOr7pgwpGNROJRNtqAetYmdg_Us4XRSfPT8X5FA7DM.apk). A GitHub Release e o teste em dispositivo ainda estão pendentes. Os resultados estão no [relatório da Atividade 2](RELATORIO_ATIVIDADE2.md) e no [registro de evidências](docs/EVIDENCIAS_ATIVIDADE2.md). A Atividade 1 permanece no histórico, no commit `27fa040`, com a tag publicada `v1.0.0`.
+**Entrega v2 publicada em 30/10/2026:** subtarefas e recorrência implementadas; **36 testes aprovados**, lint, checagem estática, bundle Android e **21 verificações do Expo Doctor aprovados**. O [build EAS](https://expo.dev/accounts/willdmx/projects/foco/builds/0aa6a645-5676-4895-a78c-b726e9e0e544) terminou com estado **`FINISHED`**. A [release v2.0.0](https://github.com/willdmx/foco-senac/releases/tag/v2.0.0) está pública, com [APK para download](https://github.com/willdmx/foco-senac/releases/download/v2.0.0/foco-v2.0.0.apk) e checksum. O download sem autenticação foi conferido. **A instalação e o teste em dispositivo ainda não foram realizados.** Os resultados estão no [relatório da Atividade 2](RELATORIO_ATIVIDADE2.md) e no [registro de evidências](docs/EVIDENCIAS_ATIVIDADE2.md). A Atividade 1 permanece no histórico, no commit `27fa040`, com a tag publicada `v1.0.0`.
 
 ## Funcionalidades
 
@@ -63,16 +63,18 @@ O desenvolvimento continua disponível em **Android no Expo Go**. A entrega da A
 
 ### Instalar o APK da Atividade 2
 
-O [build EAS da versão 2](https://expo.dev/accounts/willdmx/projects/foco/builds/0aa6a645-5676-4895-a78c-b726e9e0e544) terminou em **30/10/2026 às 19h38min21s**, horário de São Paulo. [Baixar APK Android](https://expo.dev/artifacts/eas/LNOr7pgwpGNROJRNtqAetYmdg_Us4XRSfPT8X5FA7DM.apk).
+O [build EAS da versão 2](https://expo.dev/accounts/willdmx/projects/foco/builds/0aa6a645-5676-4895-a78c-b726e9e0e544) terminou em **30/10/2026 às 19h38min21s**, horário de São Paulo. A [release v2.0.0](https://github.com/willdmx/foco-senac/releases/tag/v2.0.0) foi publicada às **19h40min33s**. [Baixar APK Android pelo GitHub](https://github.com/willdmx/foco-senac/releases/download/v2.0.0/foco-v2.0.0.apk).
 
-Arquivo verificado: `foco-v2.0.0.apk`, **75.856.729 bytes**. SHA-256: `9ec14e6f08c983f6da43e0581d61d9375c54cdb85224b8d3269366d5a3f09a78`. O [registro do artefato](docs/evidencias/apk.json) contém o resultado do EAS, o download e a verificação estrutural do pacote. **O arquivo ainda não foi instalado ou executado em um dispositivo nesta entrega.**
+Arquivo verificado: `foco-v2.0.0.apk`, **75.856.729 bytes**. SHA-256: `9ec14e6f08c983f6da43e0581d61d9375c54cdb85224b8d3269366d5a3f09a78`; o arquivo [SHA256SUMS.txt](https://github.com/willdmx/foco-senac/releases/download/v2.0.0/SHA256SUMS.txt) está anexado à release. O [registro do artefato](docs/evidencias/apk.json) contém a verificação do EAS, e o [registro da publicação](docs/evidencias/publicacao.json) confirma que o APK baixado publicamente tem o mesmo tamanho e hash. **O arquivo ainda não foi instalado ou executado em um dispositivo nesta entrega.**
 
-1. No Android, abra o [link do APK gerado pelo EAS](https://expo.dev/artifacts/eas/LNOr7pgwpGNROJRNtqAetYmdg_Us4XRSfPT8X5FA7DM.apk). A publicação do mesmo arquivo na GitHub Release ainda será confirmada.
+1. No Android, abra o [APK da release v2.0.0](https://github.com/willdmx/foco-senac/releases/download/v2.0.0/foco-v2.0.0.apk).
 2. Baixe o arquivo `.apk` e abra-o. Se o Android solicitar, permita a instalação por esse navegador ou gerenciador de arquivos.
 3. Confirme a instalação e abra **Foco** pelo ícone do aplicativo.
 4. Execute o checklist de [instalação e uso](docs/EVIDENCIAS_ATIVIDADE2.md), registrando capturas reais.
 
 O APK final contém o aplicativo e não depende de Expo Go ou de um servidor Metro. **Os dados criados dentro do Expo Go não são transferidos automaticamente para o APK**, pois são armazenamentos de aplicativos diferentes. Atualizar um APK já instalado com o mesmo identificador e assinatura preserva o banco e permite executar a migração; desinstalar ou limpar os dados remove esse armazenamento.
+
+O APK foi gerado a partir do commit [`7d9a4f3`](https://github.com/willdmx/foco-senac/commit/7d9a4f31a845fe98ab21169d4f66b4a3ab5dcc7a). A tag `v2.0.0` aponta para [`39297eb`](https://github.com/willdmx/foco-senac/commit/39297ebf69c8cc2a37a6d3216489c6f5f75e4ce7), que acrescenta a documentação do artefato. A comparação de `App.js`, configuração, `src` e `tests` confirmou o mesmo código entre esses commits. Os registros posteriores da publicação alteram somente a documentação, sem modificar o aplicativo compilado.
 
 ### Gerar o APK com EAS
 
