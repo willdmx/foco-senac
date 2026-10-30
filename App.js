@@ -10,7 +10,7 @@ import { colors } from './src/utils/theme';
 export default function App() {
   // A navegação é estado local. A fonte de verdade das tarefas é o SQLite.
   const [navigation, setNavigation] = useState({ screen: 'list', taskId: null });
-  const [filters, setFilters] = useState({ status: 'todas', categoria: 'todas', prioridade: 'todas', ordenacao: 'recentes' });
+  const [filters, setFilters] = useState({ status: 'todas', categoria: 'todas', prioridade: 'todas', ordenacao: 'recentes', recorrencia: 'todas', subtarefas: 'todas' });
   const showList = useCallback(() => setNavigation({ screen: 'list', taskId: null }), []);
   const showDetail = useCallback((id) => setNavigation({ screen: 'detail', taskId: id }), []);
   const showCreate = useCallback(() => setNavigation({ screen: 'form', taskId: null }), []);

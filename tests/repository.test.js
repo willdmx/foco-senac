@@ -8,26 +8,7 @@ import TarefaRepository from '../src/repositories/TarefaRepository.js';
 import { inicializarSchema } from '../src/database/schema.js';
 import { TarefaComPrazo } from '../src/models/index.js';
 import { ValidationError, RepositoryError } from '../src/utils/errors.js';
-
-// Apenas os testes usam este adaptador. O aplicativo usa exclusivamente expo-sqlite.
-function adapter(database) {
-  return {
-    async execAsync(sql) { database.exec(sql); },
-    async runAsync(sql, params = []) {
-      const result = database.prepare(sql).run(...params);
-      return { changes: Number(result.changes), lastInsertRowId: Number(result.lastInsertRowid) };
-    },
-    async getAllAsync(sql, params = []) { return database.prepare(sql).all(...params).map((row) => ({ ...row })); },
-  };
-}
-
-async function fixture(t) {
-  const database = new DatabaseSync(':memory:');
-  t.after(() => database.close());
-  const db = adapter(database);
-  await inicializarSchema(db);
-  return { db, repo: new TarefaRepository(async () => db) };
-}
+import { adapter, fixture } from './sqlite-helper.js';
 
 test('CRUD completo preserva status e criação durante edição', async (t) => {
   const { repo } = await fixture(t);

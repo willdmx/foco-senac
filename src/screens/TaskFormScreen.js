@@ -15,12 +15,12 @@ import {
 import { Button, Chip, Feedback, Screen } from '../components/ui';
 import { useFeedback } from '../components/FeedbackProvider';
 import tarefaRepository from '../repositories';
-import { CATEGORIAS, PRIORIDADES, LIMITE_TITULO, LIMITE_DESCRICAO } from '../utils/constants';
+import { CATEGORIAS, PRIORIDADES, RECORRENCIAS, LIMITE_TITULO, LIMITE_DESCRICAO } from '../utils/constants';
 import { formatarPrazo, parsePrazoBR } from '../utils/dates';
 import { ValidationError } from '../utils/errors';
 
 const FORM_VAZIO = {
-  titulo: '', descricao: '', categoria: 'Pessoal', prioridade: 'media', prazo: '',
+  titulo: '', descricao: '', categoria: 'Pessoal', prioridade: 'media', prazo: '', recorrencia: 'nenhuma',
 };
 
 /** @param {string} texto */
@@ -44,6 +44,7 @@ export default function TaskFormScreen({ taskId = null, onBack, onSaved }) {
   const [campoErro, setCampoErro] = useState('');
   const [salvando, setSalvando] = useState(false);
   const [tentativa, setTentativa] = useState(0);
+  const [jaGerouProxima, setJaGerouProxima] = useState(false);
   const operacao = useRef(false);
   const tituloRef = useRef(/** @type {TextInput | null} */ (null));
   const prazoRef = useRef(/** @type {TextInput | null} */ (null));
@@ -69,9 +70,11 @@ export default function TaskFormScreen({ taskId = null, onBack, onSaved }) {
           categoria: tarefa.categoria,
           prioridade: tarefa.prioridade,
           prazo: tarefa.prazo ? formatarPrazo(tarefa.prazo) : '',
+          recorrencia: tarefa.recorrencia,
         };
         setForm(valores);
         setOriginal(JSON.stringify(valores));
+        setJaGerouProxima(tarefa.proxima_gerada);
       } catch {
         if (ativo) setFalhaCarga('Não foi possível abrir a tarefa. Tente novamente.');
       } finally {
@@ -165,7 +168,7 @@ export default function TaskFormScreen({ taskId = null, onBack, onSaved }) {
             <View style={styles.heading}>
               <Text style={styles.eyebrow}>{editando ? 'AJUSTE SEUS PLANOS' : 'DÊ O PRÓXIMO PASSO'}</Text>
               <Text style={styles.title}>{editando ? 'Editar tarefa' : 'Nova tarefa'}</Text>
-              <Text style={styles.subtitle}>Organize o que importa. O título é o único campo obrigatório.</Text>
+              <Text style={styles.subtitle}>Organize o que importa. Informe um título e, se a tarefa se repetir, um prazo.</Text>
             </View>
 
             <View style={styles.card}>
@@ -210,13 +213,28 @@ export default function TaskFormScreen({ taskId = null, onBack, onSaved }) {
               </View>
 
               <View style={styles.field}>
-                <Text style={styles.label}>Prazo <Text style={styles.optional}>· opcional</Text></Text>
+                <Text style={styles.label}>Repetição</Text>
+                <View style={styles.chips}>
+                  {RECORRENCIAS.map((recorrencia) => (
+                    <Chip key={recorrencia.value} label={recorrencia.label} selected={form.recorrencia === recorrencia.value}
+                      onPress={() => alterar('recorrencia', recorrencia.value)} disabled={salvando} />
+                  ))}
+                </View>
+                <Text style={styles.hint}>{form.recorrencia === 'nenhuma'
+                  ? 'Esta tarefa será realizada uma vez.'
+                  : `Ao concluir, uma nova tarefa será criada com prazo ${form.recorrencia === 'diaria' ? '1 dia' : '7 dias'} após o prazo desta ocorrência. O checklist será copiado com todos os itens pendentes.`}</Text>
+                {jaGerouProxima && <Text style={styles.hint}>Esta ocorrência já gerou a próxima. Alterações aqui não modificam a próxima tarefa.</Text>}
+              </View>
+
+              <View style={styles.field}>
+                <Text style={styles.label}>Prazo {form.recorrencia === 'nenhuma'
+                  ? <Text style={styles.optional}>· opcional</Text> : <Text style={styles.required}>*</Text>}</Text>
                 <TextInput ref={prazoRef} value={form.prazo} onChangeText={(value) => alterar('prazo', mascararData(value))}
                   placeholder="DD/MM/AAAA" placeholderTextColor="#858C9B"
-                  accessibilityLabel="Prazo opcional, dia mês e ano" keyboardType="number-pad" maxLength={10}
+                  accessibilityLabel={`Prazo ${form.recorrencia === 'nenhuma' ? 'opcional' : 'obrigatório'}, dia mês e ano`} keyboardType="number-pad" maxLength={10}
                   editable={!salvando} style={[styles.input, campoErro === 'prazo' && styles.inputError]} />
                 {campoErro === 'prazo' && <Text accessibilityLiveRegion="polite" style={styles.fieldError}>{erro}</Text>}
-                <Text style={styles.hint}>Deixe em branco para uma tarefa sem prazo. Datas passadas serão sinalizadas como vencidas.</Text>
+                <Text style={styles.hint}>{form.recorrencia === 'nenhuma' ? 'Deixe em branco para uma tarefa sem prazo. ' : 'Tarefas com repetição precisam de uma data. '}Datas passadas serão sinalizadas como vencidas.</Text>
                 {form.prazo !== '' && (
                   <Button title="Remover prazo" variant="ghost" onPress={() => alterar('prazo', '')} disabled={salvando} />
                 )}

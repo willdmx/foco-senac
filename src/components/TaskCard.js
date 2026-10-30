@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
-import { PRIORIDADES } from '../utils/constants';
+import { PRIORIDADES, RECORRENCIAS } from '../utils/constants';
 import { colors } from '../utils/theme';
 
 function TaskCard({ task, onOpen, onToggle, busy }) {
@@ -9,7 +9,7 @@ function TaskCard({ task, onOpen, onToggle, busy }) {
   const high = task.prioridade === 'alta';
   return (
     <View style={[styles.card, task.concluida && styles.completedCard]}>
-      <Pressable accessibilityRole="checkbox" accessibilityLabel={`Concluir ${task.titulo}`} accessibilityState={{ checked: task.concluida, disabled: busy, busy }}
+      <Pressable accessibilityRole="checkbox" accessibilityLabel={`${task.concluida ? 'Reabrir' : 'Concluir'} ${task.titulo}`} accessibilityState={{ checked: task.concluida, disabled: busy, busy }}
         disabled={busy} onPress={() => onToggle(task)} style={({ pressed }) => [styles.checkTarget, pressed && { opacity: 0.6 }]}>
         {busy ? <ActivityIndicator size="small" color={colors.primary} /> : <View style={[styles.checkbox, task.concluida && styles.checked]}>{task.concluida && <Text style={styles.checkmark}>✓</Text>}</View>}
       </Pressable>
@@ -23,6 +23,14 @@ function TaskCard({ task, onOpen, onToggle, busy }) {
           </View>
         </View>
         <Text style={[styles.deadline, overdue && { color: colors.danger }]}>{task.concluida ? 'Concluída' : task.getResumoPrazo()}</Text>
+        {task.recorrencia !== 'nenhuma' && <Text style={styles.recurrence}>↻ {RECORRENCIAS.find((item) => item.value === task.recorrencia)?.label}</Text>}
+        {task.subtarefas_total > 0 && <View style={styles.checklist}>
+          <Text style={styles.deadline}>{task.subtarefas_concluidas}/{task.subtarefas_total} itens · {task.progresso_subtarefas}%</Text>
+          <View accessibilityRole="progressbar" accessibilityLabel={`Checklist de ${task.titulo}`}
+            accessibilityValue={{ min: 0, max: 100, now: task.progresso_subtarefas }} style={styles.progressTrack}>
+            <View style={[styles.progressBar, { width: `${task.progresso_subtarefas}%` }]} />
+          </View>
+        </View>}
       </Pressable>
       <Text accessible={false} style={styles.chevron}>›</Text>
     </View>
@@ -46,5 +54,9 @@ const styles = StyleSheet.create({
   priority: { borderRadius: 6, paddingHorizontal: 7, paddingVertical: 3 },
   priorityText: { fontSize: 11, lineHeight: 16, fontWeight: '600' },
   deadline: { color: colors.muted, fontSize: 12, lineHeight: 18 },
+  recurrence: { color: colors.primary, fontSize: 12, lineHeight: 18, fontWeight: '600' },
+  checklist: { gap: 6 },
+  progressTrack: { height: 4, borderRadius: 4, backgroundColor: colors.primarySoft, overflow: 'hidden' },
+  progressBar: { height: 4, backgroundColor: colors.success },
   chevron: { color: '#969CB0', fontSize: 25, padding: 8, alignSelf: 'center' },
 });

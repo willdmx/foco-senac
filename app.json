@@ -2,7 +2,8 @@
   "expo": {
     "name": "Foco",
     "slug": "foco",
-    "version": "1.0.0",
+    "version": "2.0.0",
+    "owner": "willdmx",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -10,6 +11,8 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.willdmx.foco",
+      "versionCode": 2,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -22,6 +25,11 @@
     },
     "plugins": [
       "expo-sqlite"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "39730c55-6ea4-49e8-aa07-9d519eff7170"
+      }
+    }
   }
 }

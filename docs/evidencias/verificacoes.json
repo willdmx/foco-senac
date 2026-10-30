@@ -1,0 +1,41 @@
+{
+  "versao": "2.0.0",
+  "registrado_em": "2026-10-30T19:31:36.0743923-03:00",
+  "ambiente": "Windows; PowerShell",
+  "node": "v24.16.0",
+  "npm": "11.13.0",
+  "verificacoes": [
+    {
+      "saida": 0,
+      "comando": "npm.cmd test",
+      "falhas": 0,
+      "log": "testes.txt",
+      "aprovados": 36
+    },
+    {
+      "saida": 0,
+      "comando": "npm.cmd run lint",
+      "log": "lint.txt"
+    },
+    {
+      "saida": 0,
+      "comando": "npm.cmd run typecheck",
+      "log": "typecheck.txt"
+    },
+    {
+      "saida": 0,
+      "comando": "npm.cmd run check:android",
+      "log": "bundle-android.txt",
+      "modulos": 633
+    },
+    {
+      "saida": 0,
+      "comando": "npx.cmd --yes expo-doctor",
+      "falhas": 0,
+      "log": "expo-doctor.txt",
+      "aprovados": 21
+    }
+  ],
+  "teste_android_fisico": false,
+  "observacao": "Testes SQL usam SQLite real do Node via adaptador. Bundle Hermes exportado. Nenhum teste no dispositivo ou emulador foi realizado."
+}

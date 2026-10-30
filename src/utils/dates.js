@@ -45,3 +45,20 @@ export function formatarCriacao(timestamp) {
   if (Number.isNaN(data.getTime())) return 'Data indisponível';
   return `${doisDigitos(data.getDate())}/${doisDigitos(data.getMonth() + 1)}/${data.getFullYear()} às ${doisDigitos(data.getHours())}:${doisDigitos(data.getMinutes())}`;
 }
+
+/** Soma dias de calendário sem passar pelo fuso horário local ou horário de verão. */
+export function adicionarDiasISO(prazo, dias) {
+  validarPrazoISO(prazo);
+  if (!Number.isSafeInteger(dias) || dias < 0) {
+    throw new ValidationError('O intervalo de repetição é inválido.', 'recorrencia');
+  }
+  const [ano, mes, dia] = prazo.split('-').map(Number);
+  const data = new Date(0);
+  data.setUTCFullYear(ano, mes - 1, dia);
+  data.setUTCHours(12, 0, 0, 0);
+  data.setUTCDate(data.getUTCDate() + dias);
+  if (Number.isNaN(data.getTime()) || data.getUTCFullYear() > 9999) {
+    throw new ValidationError('A próxima ocorrência ultrapassa o ano 9999. Ajuste o prazo ou desative a repetição.', 'prazo');
+  }
+  return `${String(data.getUTCFullYear()).padStart(4, '0')}-${doisDigitos(data.getUTCMonth() + 1)}-${doisDigitos(data.getUTCDate())}`;
+}

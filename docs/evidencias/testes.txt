@@ -1,0 +1,68 @@
+
+> foco@2.0.0 test
+> node --test tests/*.test.js
+
+(node:56104) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/willi/Downloads/Projetos%20Senac/foco/tests/migrations.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\willi\Downloads\Projetos Senac\foco\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ Migração da tabela v1 preserva todos os campos e IDs, com versão original zero (9.6426ms)
+✔ Migração é atômica e pode ser repetida após falha em ALTER TABLE (2.93ms)
+✔ Inicializações v2 repetidas conservam checklist, histórico e marcador de repetição (3.9364ms)
+✔ Versão futura é recusada sem recriar tabelas ou rebaixar user_version (0.5159ms)
+(node:40592) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/willi/Downloads/Projetos%20Senac/foco/tests/models.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\willi\Downloads\Projetos Senac\foco\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ Tarefa normaliza textos e encapsula seus dados (3.6116ms)
+✔ Título obrigatório e limites são validados com campo identificável (0.5042ms)
+✔ Categoria, prioridade, status e identidade inválidos são recusados (0.3776ms)
+✔ Herança e polimorfismo retornam comportamentos diferentes para prazo (0.7761ms)
+✔ Concluídas nunca aparecem como vencidas (0.2755ms)
+✔ Datas brasileiras são opcionais, estritas e respeitam anos bissextos (0.4742ms)
+✔ O prazo conserva o dia de calendário, sem conversão para UTC (0.3495ms)
+(node:35108) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/willi/Downloads/Projetos%20Senac/foco/tests/repository.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\willi\Downloads\Projetos Senac\foco\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ CRUD completo preserva status e criação durante edição (6.9628ms)
+✔ Filtros combinados usam status, categoria e prioridade no SQL (3.287ms)
+✔ Ordenação de criação é estável e aceita as duas direções (3.6355ms)
+✔ Ordenação por prazo mantém tarefas sem prazo no fim nas duas direções (2.8262ms)
+✔ Parâmetros vinculados mantêm aspas e SQL malicioso como texto literal (2.4196ms)
+✔ Entradas inválidas e registros ausentes não alteram o banco (1.5958ms)
+✔ Falhas do driver são traduzidas em mensagens compreensíveis (0.2617ms)
+✔ Inicialização repetida não apaga nem duplica registros (1.7439ms)
+✔ SQLite em arquivo conserva dados após fechar e reabrir conexão (17.5844ms)
+(node:78824) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/willi/Downloads/Projetos%20Senac/foco/tests/v2-models.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\willi\Downloads\Projetos Senac\foco\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ Subtarefa encapsula dados e valida título, vínculo, status e limites (3.1037ms)
+✔ Tarefa valida recorrência, origem e progresso sem dividir por zero (0.5096ms)
+✔ Próximos prazos respeitam calendário, ano bissexto, virada de ano e horário de verão (0.4966ms)
+✔ Serviço cria uma próxima ocorrência independente sem alterar a original (0.2969ms)
+(node:40060) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/willi/Downloads/Projetos%20Senac/foco/tests/v2-repository.test.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to \\?\C:\Users\willi\Downloads\Projetos Senac\foco\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ CRUD de subtarefas atualiza progresso agregado e mantém status do pai independente (7.9649ms)
+✔ Subtarefas rejeitam entradas e vínculos inválidos e vinculam texto SQL literalmente (2.5945ms)
+✔ Filtros novos combinam recorrência, checklist, status, categoria e prioridade em SQL (4.6375ms)
+✔ Concluir recorrente preserva histórico e cria próxima com checklist inteiro pendente (4.2824ms)
+✔ Repetição semanal gera +7 dias e tarefa sem repetição não gera ocorrência (3.8074ms)
+✔ Conclusões concorrentes por repositórios distintos geram exatamente uma próxima ocorrência (3.4057ms)
+✔ Falha ao copiar checklist desfaz conclusão, marcador e próxima; nova tentativa funciona (2.422ms)
+✔ Limite de calendário recusa conclusão sem deixar ocorrência parcialmente concluída (2.8388ms)
+✔ Excluir pai limpa subtarefas com foreign_keys desligado e preserva outras ocorrências (2.1075ms)
+✔ A FK também impede órfãs ao excluir pai diretamente na conexão habilitada (1.2662ms)
+✔ Falha na exclusão do pai restaura o checklist na mesma transação (1.3464ms)
+✔ Marcador em disco impede duplicação após apagar próxima, reabrir banco e reconcluir origem (17.8679ms)
+ℹ tests 36
+ℹ suites 0
+ℹ pass 36
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 244.1995

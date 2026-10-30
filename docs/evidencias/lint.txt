@@ -1,0 +1,4 @@
+
+> foco@2.0.0 lint
+> expo lint
+

@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, AppState, FlatList, Modal, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import tarefaRepository from '../repositories';
-import { CATEGORIAS, ORDENACOES, PRIORIDADES, STATUS } from '../utils/constants';
+import { CATEGORIAS, FILTROS_RECORRENCIA, FILTROS_SUBTAREFAS, ORDENACOES, PRIORIDADES, STATUS } from '../utils/constants';
 import { colors } from '../utils/theme';
 import { Button, Chip, Feedback, Screen } from '../components/ui';
 import TaskCard from '../components/TaskCard';
 import { useFeedback } from '../components/FeedbackProvider';
 
-const EMPTY_FILTERS = { status: 'todas', categoria: 'todas', prioridade: 'todas', ordenacao: 'recentes' };
+const EMPTY_FILTERS = { status: 'todas', categoria: 'todas', prioridade: 'todas', ordenacao: 'recentes', recorrencia: 'todas', subtarefas: 'todas' };
 
 export default function TaskListScreen({ onCreate, onOpen, filters, onFiltersChange }) {
   const [tasks, setTasks] = useState([]);
@@ -56,20 +56,23 @@ export default function TaskListScreen({ onCreate, onOpen, filters, onFiltersCha
     mutation.current = true;
     setBusyId(task.id);
     try {
-      await tarefaRepository.definirConclusao(task.id, !task.concluida);
+      const resultado = await tarefaRepository.definirConclusao(task.id, !task.concluida);
       if (!mounted.current) return;
-      notify(task.concluida ? 'Tarefa marcada como pendente.' : 'Tarefa concluída. Bom trabalho!');
+      notify(task.concluida ? 'Tarefa marcada como pendente.' : resultado.gerada
+        ? 'Tarefa concluída. Próxima ocorrência criada com checklist pendente.' : 'Tarefa concluída. Bom trabalho!');
       await latestLoad.current();
     } catch (err) { if (mounted.current) setError(err.message || 'Não foi possível mudar o status. Tente novamente.'); }
     finally { mutation.current = false; if (mounted.current) setBusyId(null); }
   }, [notify]);
 
-  const filtered = filters.categoria !== 'todas' || filters.prioridade !== 'todas' || filters.status !== 'todas';
-  const extraFilterCount = Number(filters.categoria !== 'todas') + Number(filters.prioridade !== 'todas');
+  const recurrenceFilter = filters.recorrencia || 'todas';
+  const checklistFilter = filters.subtarefas || 'todas';
+  const filtered = filters.categoria !== 'todas' || filters.prioridade !== 'todas' || filters.status !== 'todas' || recurrenceFilter !== 'todas' || checklistFilter !== 'todas';
+  const extraFilterCount = Number(filters.categoria !== 'todas') + Number(filters.prioridade !== 'todas') + Number(recurrenceFilter !== 'todas') + Number(checklistFilter !== 'todas');
   const progress = stats.total ? Math.round((stats.concluidas / stats.total) * 100) : 0;
   const sortingLabel = ORDENACOES.find((option) => option.value === filters.ordenacao)?.label;
   const changeStatus = (status) => onFiltersChange({ ...filters, status });
-  const openFilters = () => { setDraft(filters); setSheet('filters'); };
+  const openFilters = () => { setDraft({ ...EMPTY_FILTERS, ...filters }); setSheet('filters'); };
 
   const header = (
     <View style={styles.header}>
@@ -95,7 +98,12 @@ export default function TaskListScreen({ onCreate, onOpen, filters, onFiltersCha
         <Pressable accessibilityRole="button" onPress={openFilters} style={styles.tool}><Text style={styles.toolText}>Filtros{extraFilterCount ? ` · ${extraFilterCount}` : ''}</Text><Text style={styles.toolIcon}>≡</Text></Pressable>
         <Pressable accessibilityRole="button" accessibilityLabel={`Ordenar: ${sortingLabel}`} onPress={() => setSheet('sort')} style={[styles.tool, { flex: 1 }]}><Text style={styles.toolText}>{sortingLabel}</Text><Text style={styles.toolIcon}>↓</Text></Pressable>
       </View>
-      {extraFilterCount > 0 && <Text style={styles.activeFilters}>{[filters.categoria !== 'todas' ? filters.categoria : '', filters.prioridade !== 'todas' ? `Prioridade ${PRIORIDADES.find((p) => p.value === filters.prioridade)?.label.toLowerCase()}` : ''].filter(Boolean).join(' · ')}</Text>}
+      {extraFilterCount > 0 && <Text style={styles.activeFilters}>{[
+        filters.categoria !== 'todas' ? filters.categoria : '',
+        filters.prioridade !== 'todas' ? `Prioridade ${PRIORIDADES.find((p) => p.value === filters.prioridade)?.label.toLowerCase()}` : '',
+        recurrenceFilter !== 'todas' ? FILTROS_RECORRENCIA.find((item) => item.value === recurrenceFilter)?.label : '',
+        checklistFilter !== 'todas' ? FILTROS_SUBTAREFAS.find((item) => item.value === checklistFilter)?.label : '',
+      ].filter(Boolean).join(' · ')}</Text>}
       {!!error && !loading && <View style={{ gap: 8 }}><Feedback message={error} /><Button title="Tentar novamente" variant="secondary" onPress={() => { setLoadedFilters(null); load(); }} /></View>}
     </View>
   );
@@ -125,6 +133,8 @@ export default function TaskListScreen({ onCreate, onOpen, filters, onFiltersCha
               {sheet === 'filters' ? <>
                 <Text style={styles.filterLabel}>Categoria</Text><View style={styles.chips}>{['todas', ...CATEGORIAS].map((value) => <Chip key={value} label={value === 'todas' ? 'Todas' : value} selected={draft.categoria === value} onPress={() => setDraft({ ...draft, categoria: value })} />)}</View>
                 <Text style={styles.filterLabel}>Prioridade</Text><View style={styles.chips}>{[{ value: 'todas', label: 'Todas' }, ...PRIORIDADES].map((item) => <Chip key={item.value} label={item.label} selected={draft.prioridade === item.value} onPress={() => setDraft({ ...draft, prioridade: item.value })} />)}</View>
+                <Text style={styles.filterLabel}>Repetição</Text><View style={styles.chips}>{FILTROS_RECORRENCIA.map((item) => <Chip key={item.value} label={item.label} selected={draft.recorrencia === item.value} onPress={() => setDraft({ ...draft, recorrencia: item.value })} />)}</View>
+                <Text style={styles.filterLabel}>Checklist</Text><View style={styles.chips}>{FILTROS_SUBTAREFAS.map((item) => <Chip key={item.value} label={item.label} selected={draft.subtarefas === item.value} onPress={() => setDraft({ ...draft, subtarefas: item.value })} />)}</View>
                 <Button title="Aplicar filtros" onPress={() => { onFiltersChange(draft); setSheet(''); }} /><Button title="Limpar filtros" variant="ghost" onPress={() => { onFiltersChange({ ...EMPTY_FILTERS, ordenacao: filters.ordenacao }); setSheet(''); }} />
               </> : <>{ORDENACOES.map((item) => <Chip key={item.value} label={item.label} selected={filters.ordenacao === item.value} onPress={() => { onFiltersChange({ ...filters, ordenacao: item.value }); setSheet(''); }} />)}<Text style={styles.emptyText}>Tarefas sem prazo ficam ao final ao ordenar por prazo.</Text></>}
             </ScrollView>

@@ -1,7 +1,8 @@
 import Tarefa from './Tarefa.js';
 import TarefaComPrazo from './TarefaComPrazo.js';
+import Subtarefa from './Subtarefa.js';
 
-export { Tarefa, TarefaComPrazo };
+export { Tarefa, TarefaComPrazo, Subtarefa };
 
 /** @param {import('./Tarefa.js').DadosTarefa} dados */
 export function criarModeloTarefa(dados) {

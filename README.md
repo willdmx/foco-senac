@@ -1,6 +1,8 @@
-# Foco v1.0
+# Foco v2.0
 
-Aplicativo Android para organizar tarefas pessoais e acadêmicas, desenvolvido para a atividade individual do curso **Técnico em Desenvolvimento de Sistemas do Senac**. O projeto utiliza JavaScript, React Native, Expo SDK 57 e SQLite local.
+Aplicativo Android para organizar tarefas pessoais e acadêmicas, desenvolvido para as atividades individuais do curso **Técnico em Desenvolvimento de Sistemas do Senac**. A Atividade 2 evolui a versão 1.0 com **subtarefas** e **tarefas recorrentes**, preservando JavaScript, React Native, Expo SDK 57 e SQLite local.
+
+**Estado da entrega v2 em 30/10/2026:** subtarefas e recorrência implementadas; **36 testes aprovados**, lint, checagem estática, bundle Android e **21 verificações do Expo Doctor aprovados**. APK, publicação v2 e teste em dispositivo ainda estão pendentes de confirmação. Os resultados estão no [relatório da Atividade 2](RELATORIO_ATIVIDADE2.md) e no [registro de evidências](docs/EVIDENCIAS_ATIVIDADE2.md). A versão avaliada da Atividade 1 permanece no histórico, no commit `27fa040`, com a tag publicada `v1.0.0`.
 
 ## Funcionalidades
 
@@ -12,6 +14,16 @@ Aplicativo Android para organizar tarefas pessoais e acadêmicas, desenvolvido p
 - Acompanhar indicadores de tarefas totais, pendentes e concluídas.
 - Validar campos e datas, confirmar exclusões e apresentar mensagens compreensíveis.
 - Armazenar tarefas no dispositivo, preservando os dados ao fechar e reabrir o aplicativo.
+
+### Evolução da Atividade 2
+
+- **Subtarefas:** checklist dentro dos detalhes da tarefa, com cadastro, edição, conclusão, reabertura e exclusão. O progresso mostra a proporção de itens concluídos; a tarefa principal mantém seu próprio status.
+- **Recorrência:** opções Nenhuma, Diária e Semanal. A repetição exige prazo. Concluir uma ocorrência gera a próxima com prazo calculado a partir do prazo original, avançando um ou sete dias, e copia os títulos das subtarefas como pendentes.
+- **Histórico e prevenção de duplicações:** a ocorrência anterior permanece concluída. Um registro persistente de geração impede que chamadas repetidas, reabertura da ocorrência anterior ou exclusão da próxima criem cópias adicionais da mesma ocorrência.
+- **Consultas:** filtros de tarefas recorrentes e tarefas com subtarefas combinados aos filtros e ordenações existentes, executados em SQL.
+- **Migração:** evolução do banco existente sem apagar tarefas da versão 1.0; a validação da migração integra a suíte da Atividade 2.
+
+Esses comportamentos estão implementados na versão 2. Os testes automatizados cobrem as regras de domínio, as consultas e a preservação dos dados; a instalação e a execução nativa do APK têm comprovação separada no relatório.
 
 Não há cadastro de usuário, autenticação, backend, sincronização, dados demonstrativos inseridos automaticamente ou chamadas a APIs externas. O uso das tarefas é local. No desenvolvimento com Expo Go, o computador continua sendo necessário para servir o pacote JavaScript ao abrir ou recarregar o projeto; isso não significa que as tarefas dependam de um servidor.
 
@@ -47,7 +59,31 @@ npx.cmd expo start --go --clear
 
 Se o celular não conseguir alcançar o computador, confira a rede e a permissão do Node.js no firewall. Um túnel pode ser usado como alternativa com `npx.cmd expo start --go --tunnel`; o Expo poderá solicitar uma ferramenta adicional de túnel. Isso não altera o armazenamento local do aplicativo.
 
-O alvo deste MVP é **Android no Expo Go**. O script `web` herdado do template não representa suporte validado à versão web do SQLite. Não é necessário gerar pastas `android/` ou `ios/`, usar Android Studio ou fazer um build nativo para executar os módulos utilizados aqui.
+O desenvolvimento continua disponível em **Android no Expo Go**. A entrega da Atividade 2 também prevê um **APK independente**, gerado pelo EAS Build. O script `web` herdado do template não representa suporte validado à versão web do SQLite. As pastas `android/` e `ios/` são geradas pela infraestrutura Expo quando necessário; não precisam ser criadas manualmente.
+
+### Instalar o APK da Atividade 2
+
+O link do APK será registrado no [relatório](RELATORIO_ATIVIDADE2.md) após o EAS confirmar a geração do arquivo `.apk`. Até essa confirmação, não há download final anunciado.
+
+1. No Android, abra o link real do APK registrado no relatório ou o arquivo anexado à versão publicada na [página de releases](https://github.com/willdmx/foco-senac/releases).
+2. Baixe o arquivo `.apk` e abra-o. Se o Android solicitar, permita a instalação por esse navegador ou gerenciador de arquivos.
+3. Confirme a instalação e abra **Foco** pelo ícone do aplicativo.
+4. Execute o checklist de [instalação e uso](docs/EVIDENCIAS_ATIVIDADE2.md), registrando capturas reais.
+
+O APK final contém o aplicativo e não depende de Expo Go ou de um servidor Metro. **Os dados criados dentro do Expo Go não são transferidos automaticamente para o APK**, pois são armazenamentos de aplicativos diferentes. Atualizar um APK já instalado com o mesmo identificador e assinatura preserva o banco e permite executar a migração; desinstalar ou limpar os dados remove esse armazenamento.
+
+### Gerar o APK com EAS
+
+A conta `willdmx` foi autenticada e o projeto está vinculado a [@willdmx/foco](https://expo.dev/accounts/willdmx/projects/foco). A configuração usa o identificador Android `com.willdmx.foco`, versão `2.0.0` e `versionCode` 2. A credencial de assinatura foi gerada no EAS, sem arquivo de chave no repositório. Para consultar a sessão ou solicitar um build:
+
+```powershell
+npx.cmd eas-cli@latest whoami
+# Se não houver uma sessão autenticada:
+npx.cmd eas-cli@latest login
+npx.cmd eas-cli@latest build -p android --profile preview
+```
+
+O perfil `preview` utiliza distribuição `internal` e `android.buildType: "apk"`, sem `developmentClient`. A conclusão deve ser conferida na página do build, incluindo a extensão do artefato. Empacotamento JavaScript local não equivale à geração do APK. Consulte as instruções oficiais de [APK Android](https://docs.expo.dev/build-reference/apk/) e [distribuição interna](https://docs.expo.dev/build/internal-distribution/).
 
 ## Estrutura e navegação
 
@@ -56,6 +92,7 @@ foco/
 ├── index.js                         # Registra o componente raiz do Expo
 ├── App.js                           # Entrada visual e navegação por estado React
 ├── app.json                         # Configuração do aplicativo e plugin SQLite
+├── eas.json                         # Perfil preview: distribuição interna em APK
 ├── src/
 │   ├── screens/
 │   │   ├── TaskListScreen.js         # Lista, filtros, ordenação e indicadores
@@ -64,14 +101,18 @@ foco/
 │   ├── components/
 │   │   ├── ui.js                     # Botões, seletores, mensagens e estrutura visual
 │   │   ├── TaskCard.js               # Item da lista com consulta e conclusão
+│   │   ├── TaskChecklist.js          # Cadastro, edição e ações das subtarefas
 │   │   └── FeedbackProvider.js       # Mensagens compartilhadas de sucesso
 │   ├── models/
 │   │   ├── Tarefa.js
 │   │   ├── TarefaComPrazo.js
+│   │   ├── Subtarefa.js              # Validação e encapsulamento dos itens
+│   │   ├── RecorrenciaService.js     # Validação da repetição e cálculo do próximo prazo
 │   │   └── index.js                  # Fábrica de modelos
 │   ├── database/
 │   │   ├── index.js                  # Abre e compartilha a conexão foco.db
-│   │   └── schema.js                 # Tabela e índices não destrutivos
+│   │   ├── schema.js                 # Migração idempotente e índices
+│   │   └── transacoes.js             # Fila compartilhada de transações exclusivas
 │   ├── repositories/
 │   │   ├── TarefaRepository.js       # CRUD, filtros, ordenações e indicadores SQL
 │   │   └── index.js                  # Instância compartilhada do repositório
@@ -82,7 +123,16 @@ foco/
 │       └── theme.js                  # Cores e estilos comuns
 ├── tests/
 │   ├── models.test.js
-│   └── repository.test.js
+│   ├── repository.test.js
+│   ├── v2-models.test.js
+│   ├── v2-repository.test.js
+│   ├── migrations.test.js
+│   └── sqlite-helper.js              # Adaptador SQLite real somente para testes
+├── docs/
+│   ├── EVIDENCIAS_ATIVIDADE2.md
+│   ├── ROTEIRO_APRESENTACAO.md
+│   └── evidencias/                   # Saídas reais das verificações
+├── RELATORIO_ATIVIDADE2.md
 ├── eslint.config.js
 └── jsconfig.json                     # Checagem estática dos arquivos JavaScript
 ```
@@ -136,7 +186,7 @@ Editar o conteúdo de uma tarefa preserva sua data original de criação e seu s
 
 ## SQLite e persistência
 
-O banco local chama-se **`foco.db`**. A aplicação usa exclusivamente `expo-sqlite`, com as APIs assíncronas `openDatabaseAsync`, `execAsync`, `runAsync` e `getAllAsync`.
+O banco local chama-se **`foco.db`**. A aplicação usa exclusivamente `expo-sqlite`, com as APIs assíncronas `openDatabaseAsync`, `execAsync`, `runAsync`, `getAllAsync` e, na versão 2, `withExclusiveTransactionAsync` para transações.
 
 | Campo | Tipo SQLite | Finalidade |
 | --- | --- | --- |
@@ -148,12 +198,21 @@ O banco local chama-se **`foco.db`**. A aplicação usa exclusivamente `expo-sql
 | `prazo` | TEXT ou NULL | Dia de calendário em `AAAA-MM-DD` |
 | `concluida` | INTEGER | `0` para pendente e `1` para concluída |
 | `criado_em` | TEXT | Data e hora de criação em ISO 8601 |
+| `recorrencia` | TEXT | `nenhuma`, `diaria` ou `semanal` |
+| `origem_id` | INTEGER ou NULL | Identifica a ocorrência anterior; vínculo lógico do histórico |
+| `proxima_gerada` | INTEGER | Marcador persistente de geração, com valor `0` ou `1` |
 
 A inicialização executa `CREATE TABLE IF NOT EXISTS` e `CREATE INDEX IF NOT EXISTS`. Não executa `DROP TABLE`, limpeza ou inserção de tarefas fictícias. Os índices apoiam consultas por status, categoria/prioridade, prazo e criação. O modo WAL é habilitado. A conexão e a inicialização são compartilhadas; uma falha de abertura permite uma nova tentativa.
 
 O prazo é um dia de calendário, sem conversão para UTC, evitando mudar o dia informado por causa do fuso horário. Já `criado_em` registra um instante, apresentado em horário local na interface.
 
-Os registros permanecem após fechar o aplicativo, recarregar o JavaScript ou reiniciar o servidor Expo. Limpar os dados do Expo Go, desinstalá-lo ou apagar seu armazenamento pode remover o banco; este MVP não oferece backup ou sincronização.
+Os registros permanecem após fechar o aplicativo, recarregar o JavaScript ou reiniciar o servidor Expo. Limpar os dados do aplicativo, desinstalá-lo ou apagar seu armazenamento pode remover o banco; este MVP não oferece backup ou sincronização. O banco do Expo Go e o banco do APK são separados.
+
+Na versão 2, `subtarefas` armazena `id`, `tarefa_id`, `titulo`, `concluida` e `criado_em`, com chave estrangeira e exclusão em cascata. A migração em `src/database/schema.js` consulta `PRAGMA table_info`, adiciona somente colunas ausentes e registra `PRAGMA user_version = 2`. Não redefine valores das tarefas antigas.
+
+As gravações usam uma fila compartilhada e transações exclusivas. A exclusão da tarefa principal também remove suas subtarefas explicitamente dentro da transação. Geração da próxima ocorrência, marcador de geração e cópia do checklist confirmam juntos; uma falha desfaz a operação. Uma restrição de unicidade em `origem_id` complementa o marcador persistente contra duplicações.
+
+Os novos filtros usam `recorrencia` e `EXISTS`/`NOT EXISTS` sobre `subtarefas`, sem filtrar uma lista fictícia em memória. Os totais do checklist são agregados no SQL e o percentual é `Math.round(concluidas / total * 100)`, ou zero quando não há itens. Consulte os resultados de validação no [relatório da Atividade 2](RELATORIO_ATIVIDADE2.md).
 
 ### Consultas SQL
 
@@ -207,15 +266,21 @@ npm.cmd run check:android
 - `test`: executa testes de modelos e repositório com o test runner do Node. O adaptador `node:sqlite` existe somente nos testes; no aplicativo, a persistência continua exclusivamente em `expo-sqlite`.
 - `check:android`: empacota a aplicação para Android em `dist/android`. Isso detecta erros de importação e transformação, mas não produz um APK e não substitui a execução em um dispositivo.
 
-Os **16 testes automatizados da camada de dados passaram**, incluindo CRUD, filtros combinados, quatro ordenações, parâmetros vinculados, tentativas de injeção, datas inválidas, encapsulamento, herança, tratamento de erros e preservação de registros em um arquivo SQLite após fechar/reabrir a conexão.
+**Histórico da Atividade 1:** os 16 testes automatizados da camada de dados passaram, incluindo CRUD, filtros combinados, quatro ordenações, parâmetros vinculados, tentativas de injeção, datas inválidas, encapsulamento, herança, tratamento de erros e preservação de registros em um arquivo SQLite após fechar/reabrir a conexão. Esses resultados históricos não comprovam, sozinhos, a versão 2.
 
 Na implementação de 28/10/2026, passaram também **ESLint**, **checagem estática do JavaScript**, **exportação Android com bytecode Hermes** e **as 21 verificações do Expo Doctor** (`npx.cmd --yes expo-doctor`). O compilador Hermes precisou executar fora do sandbox porque a primeira tentativa teve a gravação de um arquivo temporário bloqueada. A checagem `expo install --check` confirmou as versões usando o mapa local do SDK 57. O Expo permaneceu em `57.0.31`, React Native em `0.86.3` e expo-sqlite em `57.0.4`.
 
 `npm audit` reportou oito alertas na cadeia de dependências do Expo (cinco baixos e três altos), associados a `deepmerge` e `zod`. Não foi aplicado `audit fix --force`: a correção sugerida pelo npm mudaria o SDK, contrariando o escopo desta atividade. Isso deve ser reavaliado antes de uma publicação em produção.
 
-**Não foi realizado teste em Android físico ou emulador.** A confirmação do comportamento do driver nativo, teclado, botão voltar e áreas das barras do sistema deve ser feita no Expo Go pelo roteiro abaixo.
+**Atividade 2, 30/10/2026:** `npm.cmd test` concluiu com **36 testes aprovados, zero falhas e código de saída 0**, incluindo os 16 testes anteriores e 20 novos. Os testes cobrem subtarefas, progresso, recorrência, migração v1, rollback, concorrência e prevenção de duplicações mesmo após excluir a próxima ocorrência e reabrir o banco. Consulte a [saída real dos testes](docs/evidencias/testes.txt).
+
+Lint e checagem estática do JavaScript também passaram, com registros em [lint.txt](docs/evidencias/lint.txt) e [typecheck.txt](docs/evidencias/typecheck.txt). O [bundle Android](docs/evidencias/bundle-android.txt) exportou 633 módulos e bytecode Hermes de 1,7 MB para `dist/android`; o [Expo Doctor](docs/evidencias/expo-doctor.txt) aprovou 21/21 verificações. Todos os comandos concluíram com saída 0. O [registro da execução](docs/evidencias/verificacoes.json) informa data, ambiente e códigos de saída. Esses resultados não equivalem à geração ou instalação de APK.
+
+**Não foi realizado teste em Android físico ou emulador nesta etapa de documentação.** A confirmação do comportamento do driver nativo, instalação do APK, teclado, botão voltar e áreas das barras do sistema exige execução real e registro no [checklist de evidências](docs/EVIDENCIAS_ATIVIDADE2.md).
 
 ## Roteiro de apresentação individual
+
+Para a Atividade 2, use o [roteiro de 3 a 5 minutos](docs/ROTEIRO_APRESENTACAO.md), com destaque para subtarefas, recorrência, preservação dos dados e APK. O roteiro abaixo continua útil para demonstrar a base e verificar regressões:
 
 1. **Apresentar o problema:** explicar que o Foco reúne tarefas pessoais e acadêmicas em um aplicativo local, simples e sem login.
 2. **Mostrar a arquitetura:** abrir `App.js` e as pastas `screens`, `models`, `database` e `repositories`; explicar a navegação por estado e a separação de responsabilidades.
