@@ -7,12 +7,15 @@ Este documento registra evidências e pendências. Itens marcados correspondem a
 | Dado | Registro |
 | --- | --- |
 | Data/hora da coleta automatizada | 30/10/2026, 19h31min36s, horário de São Paulo (`-03:00`) |
-| Responsável pela execução | Pendente |
-| Commit/tag testados | Árvore de trabalho Foco 2.0.0; commit final ainda a registrar |
-| Build EAS e URL | Pendente |
-| APK: nome, tamanho e SHA-256 | Pendente |
-| Aparelho ou emulador / versão Android | Pendente |
-| Instalação nova ou atualização | Pendente |
+| Execução das verificações automatizadas | Assistente no workspace Windows, via PowerShell |
+| Responsável pela instalação/teste físico | Não realizado; responsável ainda não registrado |
+| Commit do código verificado e enviado ao EAS | [`7d9a4f31a845fe98ab21169d4f66b4a3ab5dcc7a`](https://github.com/willdmx/foco-senac/commit/7d9a4f31a845fe98ab21169d4f66b4a3ab5dcc7a) |
+| Build EAS e URL | [`0aa6a645-5676-4895-a78c-b726e9e0e544`](https://expo.dev/accounts/willdmx/projects/foco/builds/0aa6a645-5676-4895-a78c-b726e9e0e544), **`FINISHED`** às 19h38min21s de 30/10/2026 (São Paulo) |
+| APK: nome e tamanho | `foco-v2.0.0.apk`, `75856729` bytes |
+| SHA-256 | `9ec14e6f08c983f6da43e0581d61d9375c54cdb85224b8d3269366d5a3f09a78` |
+| Registro do download e da estrutura | [apk.json](evidencias/apk.json), 30/10/2026 às 19h39min20s (São Paulo) |
+| Aparelho ou emulador / versão Android | Não executado; dispositivo não disponível |
+| Instalação nova ou atualização | Nenhuma instalação executada neste registro |
 | Identificador Android configurado | `com.willdmx.foco` |
 
 ## Verificações automatizadas
@@ -31,14 +34,17 @@ Saídas reais: [testes.txt](evidencias/testes.txt), [lint.txt](evidencias/lint.t
 
 ## Build e instalação
 
-- [ ] Registrar a página do build concluído no EAS, com ID, estado final e perfil `preview`.
-- [ ] Confirmar que o artefato baixado termina em `.apk`, e não `.aab`.
-- [ ] Guardar nome, tamanho e hash SHA-256 do APK real.
+- [x] Registrar a página do build concluído no EAS, com ID, estado final e perfil `preview`.
+- [x] Confirmar que o artefato baixado termina em `.apk`, e não `.aab`.
+- [x] Guardar nome, tamanho e hash SHA-256 do APK real.
+- [x] Verificar estrutura do APK: manifest, classes DEX, bundle e bibliotecas SQLite para quatro ABIs.
 - [ ] Capturar a tela de instalação do APK no Android.
 - [ ] Capturar a confirmação de instalação ou abertura pelo ícone do Foco.
 - [ ] Abrir o aplicativo instalado sem Expo Go ou servidor Metro.
 
-Nomes sugeridos: `01-build-concluido.png`, `02-instalacao-apk.png` e `03-app-instalado.png`. As imagens precisam vir do EAS e do dispositivo realmente utilizados. Uma captura do Expo Go não comprova instalação do APK.
+O build e o arquivo estão registrados na [página EAS](https://expo.dev/accounts/willdmx/projects/foco/builds/0aa6a645-5676-4895-a78c-b726e9e0e544) e em [apk.json](evidencias/apk.json); o [APK está disponível no EAS](https://expo.dev/artifacts/eas/LNOr7pgwpGNROJRNtqAetYmdg_Us4XRSfPT8X5FA7DM.apk). Não foram fabricadas capturas.
+
+Nomes sugeridos para capturas futuras: `01-build-concluido.png`, `02-instalacao-apk.png` e `03-app-instalado.png`. As imagens precisam vir do EAS e do dispositivo realmente utilizados. Uma captura do Expo Go ou a inspeção do arquivo ZIP não comprova instalação do APK.
 
 ## Uso do aplicativo instalado
 
@@ -65,13 +71,14 @@ Nomes sugeridos: `04-checklist-progresso.png`, `05-validacao-recorrencia.png`, `
 - [x] Registrar o teste automatizado que abre banco v1, aplica a migração e compara os dados antigos.
 - [x] Registrar reaplicação da inicialização sem apagar, duplicar ou redefinir registros.
 - [ ] Se houver APK anterior com mesmo pacote e assinatura, atualizar sem desinstalar e registrar os dados antes/depois.
-- [ ] Se não houver APK anterior compatível, declarar essa limitação; não substituir essa evidência por uma instalação nova.
+- [x] Declarar a limitação: não houve APK v1 compatível testado por atualização; essa evidência não foi substituída por instalação nova.
 
-O banco do Expo Go não é importado automaticamente para o APK. Não apresentar a primeira instalação do APK como migração do armazenamento do Expo Go.
+O banco do Expo Go não é importado automaticamente para o APK. Não apresentar a primeira instalação do APK como migração do armazenamento do Expo Go. Os testes aprovados de migração são automatizados sobre banco SQLite real, sem evidência de atualização de um APK v1 em aparelho.
 
 ## Publicação
 
-- [ ] Conferir os commits da Atividade 1 preservados no GitHub.
+- [x] Conferir os commits da Atividade 1 preservados no GitHub, com a tag `v1.0.0` em `27fa040`.
+- [x] Publicar código-fonte, testes e documentação v2 em `main`, no commit `7d9a4f3`, confirmado no remoto.
 - [ ] Conferir tag `v1.0.0` na base e `v2.0.0` na entrega correspondente.
 - [ ] Publicar relatório, README, roteiro e evidências sem credenciais ou dados pessoais desnecessários.
 - [ ] Anexar o APK real à GitHub Release `v2.0.0`.
@@ -86,6 +93,9 @@ O banco do Expo Go não é importado automaticamente para o APK. Não apresentar
 | Checagem de JavaScript | [typecheck.txt](evidencias/typecheck.txt) | 30/10/2026 | Aprovada |
 | Bundle Android | [bundle-android.txt](evidencias/bundle-android.txt) | 30/10/2026 | 633 módulos e Hermes exportados; saída 0 |
 | Diagnóstico Expo | [expo-doctor.txt](evidencias/expo-doctor.txt) | 30/10/2026 | 21/21 verificações; saída 0 |
+| Publicação do código v2 | [Commit `7d9a4f3`](https://github.com/willdmx/foco-senac/commit/7d9a4f31a845fe98ab21169d4f66b4a3ab5dcc7a) | 30/10/2026 | Publicado em `main` |
+| Build EAS concluído | [Build `0aa6a645`](https://expo.dev/accounts/willdmx/projects/foco/builds/0aa6a645-5676-4895-a78c-b726e9e0e544) | 30/10/2026, 19h38min21s (São Paulo) | `FINISHED`, APK gerado |
+| Download e verificação do APK | [apk.json](evidencias/apk.json) | 30/10/2026, 19h39min20s (São Paulo) | 75.856.729 bytes; SHA-256 e estrutura registrados |
 | Instalação e uso em Android | Sem arquivo ou captura real | Pendente | Não realizado neste registro |
 
 Quando uma verificação falhar, registrar o comportamento observado e a limitação. O checklist não deve ser marcado para indicar apenas que um recurso foi implementado no código.

@@ -9,7 +9,7 @@
 
 ## Situação registrada
 
-As duas funcionalidades da versão 2 estão implementadas. Em 30/10/2026, a suíte integrada concluiu com **36 testes aprovados, zero falhas e código de saída 0**; lint, checagem estática, bundle Android e as **21 verificações do Expo Doctor** também passaram. A geração do APK, sua publicação e o teste físico ainda aguardam confirmação neste registro. A versão 1.0 continua preservada no histórico Git.
+As duas funcionalidades da versão 2 estão implementadas. Em 30/10/2026, a suíte integrada concluiu com **36 testes aprovados, zero falhas e código de saída 0**; lint, checagem estática, bundle Android e as **21 verificações do Expo Doctor** também passaram. O código-fonte foi publicado em `main` no commit `7d9a4f31a845fe98ab21169d4f66b4a3ab5dcc7a`. O build EAS desse código terminou com estado **`FINISHED`**, e o APK foi baixado e verificado. A GitHub Release e o teste físico ainda aguardam confirmação. A versão 1.0 continua preservada no histórico Git.
 
 | Item | Estado atual | Evidência |
 | --- | --- | --- |
@@ -21,9 +21,10 @@ As duas funcionalidades da versão 2 estão implementadas. Em 30/10/2026, a suí
 | Bundle Android | Aprovado; Hermes, 633 módulos | [Bundle Android](docs/evidencias/bundle-android.txt) |
 | Expo Doctor | 21/21 verificações aprovadas | [Diagnóstico Expo](docs/evidencias/expo-doctor.txt) |
 | Conta e vínculo EAS | Autenticação e vínculo confirmados | `willdmx`, projeto `@willdmx/foco` |
-| Build EAS / APK | Não confirmado | URL e artefato pendentes |
+| Build EAS / APK | `FINISHED`; APK baixado e estrutura verificada | [Build EAS](https://expo.dev/accounts/willdmx/projects/foco/builds/0aa6a645-5676-4895-a78c-b726e9e0e544) e [registro do artefato](docs/evidencias/apk.json) |
 | Instalação e uso em Android | Não realizados neste registro | Capturas reais pendentes |
-| Publicação v2 no GitHub | Pendente | Commit/tag/release finais pendentes |
+| Código v2 no GitHub | Publicado em `main`; envio confirmado | [Commit `7d9a4f3`](https://github.com/willdmx/foco-senac/commit/7d9a4f31a845fe98ab21169d4f66b4a3ab5dcc7a) |
+| GitHub Release v2 / APK anexado | Pendentes de confirmação | APK já disponível no EAS |
 
 ## Objetivo e escopo preservado
 
@@ -96,7 +97,7 @@ Os testes de repositório utilizam o SQLite do Node com o adaptador `tests/sqlit
 
 ## APK com EAS Build
 
-O perfil `preview` foi configurado com `distribution: "internal"`, `android.buildType: "apk"` e `developmentClient: false`. O versionamento utiliza `appVersionSource: "local"`. A conta `willdmx` está autenticada, o projeto foi vinculado e a credencial de assinatura foi gerada remotamente, sem chave armazenada no repositório. O build ainda não foi confirmado.
+O perfil `preview` foi configurado com `distribution: "internal"`, `android.buildType: "apk"` e `developmentClient: false`. O versionamento utiliza `appVersionSource: "local"`. A conta `willdmx` está autenticada, o projeto foi vinculado e a credencial de assinatura foi gerada remotamente, sem chave armazenada no repositório. O build terminou com estado `FINISHED` em 30/10/2026 às 19h38min21s, horário de São Paulo, e produziu um arquivo `.apk`.
 
 ```powershell
 npx.cmd eas-cli@latest whoami
@@ -111,18 +112,22 @@ npx.cmd eas-cli@latest build -p android --profile preview
 | Versão / versionCode | `2.0.0` / `2` |
 | Conta/projeto Expo | `willdmx` / [@willdmx/foco](https://expo.dev/accounts/willdmx/projects/foco) |
 | ID do projeto EAS | `39730c55-6ea4-49e8-aa07-9d519eff7170` |
-| ID do build | Pendente |
-| URL do build | Pendente — nenhum link de build anunciado |
-| Estado final do build | Pendente |
-| URL do `.apk` | Pendente — nenhum APK confirmado |
-| Nome/tamanho/SHA-256 do arquivo | Pendente após download real |
-| Commit associado ao build | Pendente |
+| ID do build | `0aa6a645-5676-4895-a78c-b726e9e0e544` |
+| URL do build | [Acompanhar build EAS](https://expo.dev/accounts/willdmx/projects/foco/builds/0aa6a645-5676-4895-a78c-b726e9e0e544) |
+| Estado final do build | **`FINISHED`** |
+| Conclusão | `2026-10-30T22:38:21.813Z` — 19h38min21s em São Paulo |
+| URL do `.apk` | [Baixar APK do EAS](https://expo.dev/artifacts/eas/LNOr7pgwpGNROJRNtqAetYmdg_Us4XRSfPT8X5FA7DM.apk) |
+| Nome do arquivo baixado | `foco-v2.0.0.apk` |
+| Tamanho | `75856729` bytes |
+| SHA-256 | `9ec14e6f08c983f6da43e0581d61d9375c54cdb85224b8d3269366d5a3f09a78` |
+| Download verificado | 30/10/2026 às 19h39min20s, horário de São Paulo |
+| Commit associado ao build | `7d9a4f31a845fe98ab21169d4f66b4a3ab5dcc7a` |
 
-Só um build concluído com artefato `.apk` atende ao requisito de arquivo instalável. Um `.aab`, um bundle JavaScript, a abertura no Expo Go ou uma captura da fila do EAS não comprovam essa entrega. Caso haja falha, devem ser registrados o erro, a correção e o novo resultado sem ocultar a limitação.
+O [registro `apk.json`](docs/evidencias/apk.json) documenta o artefato real. A inspeção da estrutura ZIP confirmou `AndroidManifest.xml`, `classes.dex`, `classes2.dex`, `assets/index.android.bundle` e `libexpo-sqlite.so` para quatro ABIs (`arm64-v8a`, `armeabi-v7a`, `x86` e `x86_64`). Isso comprova a existência e a estrutura do APK baixado; **não comprova instalação nem execução no Android**, que continuam pendentes.
 
 ## Instalação e validação no Android
 
-Depois de obter o APK real:
+Para instalar o APK gerado:
 
 1. Abrir o link do arquivo no celular e concluir o download.
 2. Permitir a instalação por essa origem quando o Android solicitar e instalar o arquivo.
@@ -138,7 +143,7 @@ Depois de obter o APK real:
 
 ## Publicação e apresentação
 
-A publicação mantém os commits da Atividade 1, sem recriar o repositório ou usar force push. A base é `27fa040`, já identificada pela tag publicada `v1.0.0`. A tag `v2.0.0` deve apontar para a entrega final após conferir o commit e os artefatos correspondentes.
+A publicação mantém os commits da Atividade 1, sem recriar o repositório ou usar force push. A base é `27fa040`, já identificada pela tag publicada `v1.0.0`. O código, os testes e a documentação v2 foram publicados em `main` no commit `7d9a4f31a845fe98ab21169d4f66b4a3ab5dcc7a`, confirmado no remoto. A tag `v2.0.0` deve identificar a entrega após conferir o APK e os artefatos correspondentes.
 
 Na [página de releases](https://github.com/willdmx/foco-senac/releases), criar a entrega `Foco v2.0.0`, associada à tag correta, e anexar o APK efetivamente gerado. As notas devem incluir subtarefas, recorrência, resultado dos testes, link do build, checksum do APK e limitações reais. A publicação do código sem o artefato não deve ser anunciada como entrega completa do APK.
 
@@ -146,7 +151,8 @@ O [roteiro individual](docs/ROTEIRO_APRESENTACAO.md) foi dimensionado para 3 a 5
 
 ## Limitações conhecidas
 
-- Build, instalação e execução física ainda não estão comprovados na redação inicial deste relatório. Não foram encontrados ADB, Android SDK ou emulador nos caminhos locais verificados; por isso não há evidência de execução Android neste ambiente.
+- O APK foi gerado e verificado como arquivo, mas instalação e execução física não foram realizadas: não há dispositivo disponível e não foram encontrados ADB, Android SDK ou emulador nos caminhos locais verificados.
+- Não houve teste de atualização de um APK v1 compatível. A migração v1 foi verificada por testes automatizados sobre banco SQLite real; isso não equivale à atualização de um APK instalado.
 - Não há sincronização entre aparelhos, backup automático, importação do banco do Expo Go ou notificações.
 - A recorrência avança ao concluir uma ocorrência; não gera todas as tarefas futuras antecipadamente.
 - A versão web não é alvo validado desta entrega.

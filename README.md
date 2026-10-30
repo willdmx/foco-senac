@@ -2,7 +2,7 @@
 
 Aplicativo Android para organizar tarefas pessoais e acadêmicas, desenvolvido para as atividades individuais do curso **Técnico em Desenvolvimento de Sistemas do Senac**. A Atividade 2 evolui a versão 1.0 com **subtarefas** e **tarefas recorrentes**, preservando JavaScript, React Native, Expo SDK 57 e SQLite local.
 
-**Estado da entrega v2 em 30/10/2026:** subtarefas e recorrência implementadas; **36 testes aprovados**, lint, checagem estática, bundle Android e **21 verificações do Expo Doctor aprovados**. APK, publicação v2 e teste em dispositivo ainda estão pendentes de confirmação. Os resultados estão no [relatório da Atividade 2](RELATORIO_ATIVIDADE2.md) e no [registro de evidências](docs/EVIDENCIAS_ATIVIDADE2.md). A versão avaliada da Atividade 1 permanece no histórico, no commit `27fa040`, com a tag publicada `v1.0.0`.
+**Estado da entrega v2 em 30/10/2026:** subtarefas e recorrência implementadas; **36 testes aprovados**, lint, checagem estática, bundle Android e **21 verificações do Expo Doctor aprovados**. O código está publicado em `main`, no commit [`7d9a4f3`](https://github.com/willdmx/foco-senac/commit/7d9a4f31a845fe98ab21169d4f66b4a3ab5dcc7a). O [build EAS](https://expo.dev/accounts/willdmx/projects/foco/builds/0aa6a645-5676-4895-a78c-b726e9e0e544) concluiu com estado **`FINISHED`**, e o [APK real está disponível](https://expo.dev/artifacts/eas/LNOr7pgwpGNROJRNtqAetYmdg_Us4XRSfPT8X5FA7DM.apk). A GitHub Release e o teste em dispositivo ainda estão pendentes. Os resultados estão no [relatório da Atividade 2](RELATORIO_ATIVIDADE2.md) e no [registro de evidências](docs/EVIDENCIAS_ATIVIDADE2.md). A Atividade 1 permanece no histórico, no commit `27fa040`, com a tag publicada `v1.0.0`.
 
 ## Funcionalidades
 
@@ -59,13 +59,15 @@ npx.cmd expo start --go --clear
 
 Se o celular não conseguir alcançar o computador, confira a rede e a permissão do Node.js no firewall. Um túnel pode ser usado como alternativa com `npx.cmd expo start --go --tunnel`; o Expo poderá solicitar uma ferramenta adicional de túnel. Isso não altera o armazenamento local do aplicativo.
 
-O desenvolvimento continua disponível em **Android no Expo Go**. A entrega da Atividade 2 também prevê um **APK independente**, gerado pelo EAS Build. O script `web` herdado do template não representa suporte validado à versão web do SQLite. As pastas `android/` e `ios/` são geradas pela infraestrutura Expo quando necessário; não precisam ser criadas manualmente.
+O desenvolvimento continua disponível em **Android no Expo Go**. A entrega da Atividade 2 inclui um **APK independente**, gerado pelo EAS Build. O script `web` herdado do template não representa suporte validado à versão web do SQLite. As pastas `android/` e `ios/` são geradas pela infraestrutura Expo quando necessário; não precisam ser criadas manualmente.
 
 ### Instalar o APK da Atividade 2
 
-O link do APK será registrado no [relatório](RELATORIO_ATIVIDADE2.md) após o EAS confirmar a geração do arquivo `.apk`. Até essa confirmação, não há download final anunciado.
+O [build EAS da versão 2](https://expo.dev/accounts/willdmx/projects/foco/builds/0aa6a645-5676-4895-a78c-b726e9e0e544) terminou em **30/10/2026 às 19h38min21s**, horário de São Paulo. [Baixar APK Android](https://expo.dev/artifacts/eas/LNOr7pgwpGNROJRNtqAetYmdg_Us4XRSfPT8X5FA7DM.apk).
 
-1. No Android, abra o link real do APK registrado no relatório ou o arquivo anexado à versão publicada na [página de releases](https://github.com/willdmx/foco-senac/releases).
+Arquivo verificado: `foco-v2.0.0.apk`, **75.856.729 bytes**. SHA-256: `9ec14e6f08c983f6da43e0581d61d9375c54cdb85224b8d3269366d5a3f09a78`. O [registro do artefato](docs/evidencias/apk.json) contém o resultado do EAS, o download e a verificação estrutural do pacote. **O arquivo ainda não foi instalado ou executado em um dispositivo nesta entrega.**
+
+1. No Android, abra o [link do APK gerado pelo EAS](https://expo.dev/artifacts/eas/LNOr7pgwpGNROJRNtqAetYmdg_Us4XRSfPT8X5FA7DM.apk). A publicação do mesmo arquivo na GitHub Release ainda será confirmada.
 2. Baixe o arquivo `.apk` e abra-o. Se o Android solicitar, permita a instalação por esse navegador ou gerenciador de arquivos.
 3. Confirme a instalação e abra **Foco** pelo ícone do aplicativo.
 4. Execute o checklist de [instalação e uso](docs/EVIDENCIAS_ATIVIDADE2.md), registrando capturas reais.
@@ -216,31 +218,68 @@ Os novos filtros usam `recorrencia` e `EXISTS`/`NOT EXISTS` sobre `subtarefas`, 
 
 ### Consultas SQL
 
-Valores informados pelo usuário são enviados separadamente em parâmetros vinculados `?`. `execAsync` é reservado ao SQL estático de inicialização.
+Valores informados pelo usuário são enviados separadamente em parâmetros vinculados `?`. `execAsync` é reservado ao SQL estático de inicialização. Os comandos de escrita abaixo são **trechos das transações do repositório**, não uma sequência para executar isoladamente: os modelos validam os dados, e `withExclusiveTransactionAsync` confirma ou desfaz cada operação composta.
 
 ```sql
--- Cadastro: os valores são enviados em um array para runAsync.
+-- Cadastro v2: valores enviados em um array para runAsync.
 INSERT INTO tarefas
-  (titulo, descricao, categoria, prioridade, prazo, concluida, criado_em)
-VALUES (?, ?, ?, ?, ?, ?, ?);
+  (titulo, descricao, categoria, prioridade, prazo, concluida, criado_em,
+   recorrencia, origem_id, proxima_gerada)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
--- Consulta individual.
-SELECT id, titulo, descricao, categoria, prioridade, prazo, concluida, criado_em
-FROM tarefas WHERE id = ? LIMIT 1;
+-- Filtros combinados, recorrentes com checklist e agregação para o progresso.
+-- O parâmetro de recorrência neste exemplo é 'nenhuma'.
+SELECT t.*,
+  COALESCE(s.total, 0) AS subtarefas_total,
+  COALESCE(s.concluidas, 0) AS subtarefas_concluidas
+FROM tarefas t
+LEFT JOIN (
+  SELECT tarefa_id, COUNT(*) AS total, SUM(concluida) AS concluidas
+  FROM subtarefas GROUP BY tarefa_id
+) s ON s.tarefa_id = t.id
+WHERE t.concluida = ? AND t.categoria = ? AND t.prioridade = ?
+  AND t.recorrencia <> ?
+  AND EXISTS (SELECT 1 FROM subtarefas st WHERE st.tarefa_id = t.id)
+ORDER BY t.prazo IS NULL ASC, t.prazo ASC, t.criado_em DESC, t.id DESC;
 
--- Exemplo de filtros combinados e prazo mais próximo.
-SELECT id, titulo, descricao, categoria, prioridade, prazo, concluida, criado_em
-FROM tarefas
-WHERE concluida = ? AND categoria = ? AND prioridade = ?
-ORDER BY prazo IS NULL ASC, prazo ASC, criado_em DESC, id DESC;
+-- Sem checklist: o filtro correspondente utiliza NOT EXISTS.
+SELECT t.id FROM tarefas t
+WHERE NOT EXISTS (SELECT 1 FROM subtarefas st WHERE st.tarefa_id = t.id);
 
--- Edição do conteúdo, preservando status e criação.
+-- Edição preserva status, criação, origem, marcador e subtarefas.
 UPDATE tarefas
-SET titulo = ?, descricao = ?, categoria = ?, prioridade = ?, prazo = ?
+SET titulo = ?, descricao = ?, categoria = ?, prioridade = ?, prazo = ?,
+    recorrencia = ?
 WHERE id = ?;
 
--- Alteração de status e exclusão.
+-- Status sem gerar ocorrência, inclusive reabertura.
 UPDATE tarefas SET concluida = ? WHERE id = ?;
+
+-- Trechos da mesma transação de geração de uma próxima ocorrência.
+UPDATE tarefas SET concluida = 1, proxima_gerada = 1
+WHERE id = ? AND concluida = 0 AND proxima_gerada = 0;
+
+INSERT INTO tarefas
+  (titulo, descricao, categoria, prioridade, prazo, concluida, criado_em,
+   recorrencia, origem_id, proxima_gerada)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+ON CONFLICT(origem_id) DO NOTHING;
+
+-- Só copia se a próxima ocorrência foi inserida nesta transação.
+INSERT INTO subtarefas (tarefa_id, titulo, concluida, criado_em)
+SELECT ?, titulo, 0, ? FROM subtarefas WHERE tarefa_id = ? ORDER BY id ASC;
+
+-- CRUD do checklist: cada escrita passa pela transação do repositório.
+INSERT INTO subtarefas (tarefa_id, titulo, concluida, criado_em)
+VALUES (?, ?, 0, ?);
+SELECT id, tarefa_id, titulo, concluida, criado_em
+FROM subtarefas WHERE tarefa_id = ? ORDER BY id ASC;
+UPDATE subtarefas SET titulo = ? WHERE id = ?;
+UPDATE subtarefas SET concluida = ? WHERE id = ?;
+DELETE FROM subtarefas WHERE id = ?;
+
+-- Os dois deletes abaixo pertencem à mesma transação.
+DELETE FROM subtarefas WHERE tarefa_id = ?;
 DELETE FROM tarefas WHERE id = ?;
 
 -- Indicadores de todas as tarefas, independentemente do filtro da lista.
@@ -249,6 +288,8 @@ SELECT COUNT(*) AS total,
   COALESCE(SUM(CASE WHEN concluida = 1 THEN 1 ELSE 0 END), 0) AS concluidas
 FROM tarefas;
 ```
+
+O modelo calcula o percentual a partir dos totais agregados: `total ? Math.round(concluidas / total * 100) : 0`. A consulta individual reutiliza a consulta com agregação e acrescenta `WHERE t.id = ? LIMIT 1`.
 
 Nomes de colunas e direções de ordenação não são recebidos diretamente do formulário. O repositório aceita somente as chaves `recentes`, `antigas`, `prazo_proximo` e `prazo_distante`, traduzidas por uma lista fechada de expressões SQL. Entradas fora dessa lista são rejeitadas. Tarefas sem prazo ficam no fim das duas ordenações por prazo; `id` desempata resultados para manter a ordem previsível.
 

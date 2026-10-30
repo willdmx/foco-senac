@@ -1,0 +1,30 @@
+{
+  "arquivo": "foco-v2.0.0.apk",
+  "tamanho_bytes": 75856729,
+  "sha256": "9ec14e6f08c983f6da43e0581d61d9375c54cdb85224b8d3269366d5a3f09a78",
+  "baixado_em": "2026-10-30T19:39:20.2602483-03:00",
+  "url_apk": "https://expo.dev/artifacts/eas/LNOr7pgwpGNROJRNtqAetYmdg_Us4XRSfPT8X5FA7DM.apk",
+  "url_build": "https://expo.dev/accounts/willdmx/projects/foco/builds/0aa6a645-5676-4895-a78c-b726e9e0e544",
+  "build_id": "0aa6a645-5676-4895-a78c-b726e9e0e544",
+  "estado": "FINISHED",
+  "concluido_em": "2026-10-30T22:38:21.813Z",
+  "perfil": "preview",
+  "distribuicao": "INTERNAL",
+  "pacote": "com.willdmx.foco",
+  "versao": "2.0.0",
+  "version_code": "2",
+  "sdk": "57.0.0",
+  "commit_fonte": "7d9a4f31a845fe98ab21169d4f66b4a3ab5dcc7a",
+  "estrutura_apk_verificada": true,
+  "entradas_verificadas": [
+    "classes.dex",
+    "classes2.dex",
+    "lib/arm64-v8a/libexpo-sqlite.so",
+    "lib/armeabi-v7a/libexpo-sqlite.so",
+    "lib/x86/libexpo-sqlite.so",
+    "lib/x86_64/libexpo-sqlite.so",
+    "assets/index.android.bundle",
+    "AndroidManifest.xml"
+  ],
+  "teste_em_dispositivo": false
+}
